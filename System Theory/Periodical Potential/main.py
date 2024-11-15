@@ -405,7 +405,7 @@ class PeriodicalPotential(Swarmalators2D):
 
         return (- gamma * w + ChiralMoment
                 + strengthLambda * np.sum(K * np.sin(other1 - phaseTheta), axis=1)
-                + np.random.normal(0, 6.436e-12, size=agentsNum)
+#                + np.random.normal(0, 6.436e-12, size=agentsNum)
         ) * dt
 
     def append(self):

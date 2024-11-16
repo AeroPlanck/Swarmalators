@@ -427,7 +427,7 @@ class PeriodicalPotential(Swarmalators2D):
 #                             np.random.normal(0, 6.436e-12, size=self.agentsNum))
 #                             * self.dt
 
-        self.speed[:, 0] += (-self.gamma * self.speed[:, 0] )  * self.dt
+        self.speed[:, 0] += (-self.gamma * self.speed[:, 0] ) * self.dt
 
         self.speed[:, 1] += (-self.gamma * self.speed[:, 1] ) * self.dt
 

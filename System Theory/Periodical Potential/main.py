@@ -404,9 +404,9 @@ class PeriodicalPotential(Swarmalators2D):
                     K: np.ndarray, agentsNum: int, dt: float) -> np.ndarray:
 
         return (- gamma * w + ChiralMoment
-                + strengthLambda * np.sum(K * np.sin(other1 - phaseTheta), axis=1)
+                + strengthLambda * np.sum(K * np.sin(other1 - phaseTheta), axis=0)
 #                + np.random.normal(0, 6.436e-12, size=agentsNum)
-        ) * dt
+                ) * dt
 
     def append(self):
         if self.store is not None:
@@ -426,18 +426,18 @@ class PeriodicalPotential(Swarmalators2D):
 #                             self.kappa * (np.sin(2 * np.pi * self.positionX[:, 1] / self.L) + 0.25 * np.sin(4 * np.pi * self.positionX[:, 1] / self.L)) +
 #                             self.speedV0 * self.w * np.cos(self.phaseTheta) + np.random.normal(0, 6.436e-12, size=self.agentsNum))
 #                             * self.dt
-
-        self.speed[:, 0] += (- 0 * self.speed[:, 0] - self.speedV0 * self.w * np.sin(self.phaseTheta)) * self.dt
-
-        self.speed[:, 1] += (- 0 * self.speed[:, 1] + self.speedV0 * self.w * np.cos(self.phaseTheta)) * self.dt
+        v0 = -self.gamma * self.speed[:, 0] * self.dt
+        v1 = -self.gamma * self.speed[:, 1] * self.dt
+        self.speed[:, 0] = self.speedV0 * np.cos(self.phaseTheta) + v0
+        self.speed[:, 1] = self.speedV0 * np.sin(self.phaseTheta) + v1
 
         self.positionX[:, 0] += self.speed[:, 0] * self.dt
         self.positionX[:, 1] += self.speed[:, 1] * self.dt
         self.positionX = np.mod(self.positionX, self.boundaryLength)
         self.tempForK = self.K_
         self.w += self.pointThetaSpeed
-        self.phaseTheta += self.w * self.dt
-        self.temp = self.phaseTheta
+#        self.phaseTheta += self.pointThetaSpeed
+        self.temp += self.pointThetaSpeed * self.dt
         self.phaseTheta += self.temp
         self.phaseTheta = np.mod(self.phaseTheta + np.pi, 2 * np.pi) - np.pi
 

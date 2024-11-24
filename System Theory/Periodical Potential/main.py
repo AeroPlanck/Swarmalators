@@ -418,31 +418,30 @@ class PeriodicalPotential(Swarmalators2D):
             self.store.append(key="speed", value=pd.DataFrame(self.speed))
 
     def update(self):
-#        self.speed[:, 0] += (-self.gamma * self.speed[:, 0] +
-#                             self.kappa * np.sin(2 * np.pi * self.positionX[:, 0] / self.L)
-#                             - self.speedV0 * self.w * np.sin(self.phaseTheta) + np.random.normal(0, 6.436e-12, size=self.agentsNum)) * self.dt
-#
-#        self.speed[:, 1] += (-self.gamma * self.speed[:, 1] +
-#                             self.kappa * (np.sin(2 * np.pi * self.positionX[:, 1] / self.L) + 0.25 * np.sin(4 * np.pi * self.positionX[:, 1] / self.L)) +
-#                             self.speedV0 * self.w * np.cos(self.phaseTheta) + np.random.normal(0, 6.436e-12, size=self.agentsNum))
-#                             * self.dt
-        v0 = -self.gamma * self.speed[:, 0] * self.dt
-        v1 = -self.gamma * self.speed[:, 1] * self.dt
-        self.speed[:, 0] = self.speedV0 * np.cos(self.phaseTheta) + v0
-        self.speed[:, 1] = self.speedV0 * np.sin(self.phaseTheta) + v1
-
+        self.speed[:, 0] += (
+                            -self.gamma * (self.speed[:, 0] - self.speedV0 * np.cos(self.phaseTheta))
+                            + self.kappa * (
+                            np.sin(2 * np.pi * self.positionX[:, 0] / self.L)
+                           + 0.25 * np.sin(4 * np.pi * self.positionX[:, 1] / self.L)
+                                            )
+                            ) * self.dt
+        self.speed[:, 1] += (
+                            -self.gamma * (self.speed[:, 1] - self.speedV0 * np.sin(self.phaseTheta))
+                            + self.kappa * (
+                            np.sin(2 * np.pi * self.positionX[:, 0] / self.L)
+                           + 0.25 * np.sin(4 * np.pi * self.positionX[:, 1] / self.L)
+                                            )
+                            ) * self.dt
         self.positionX[:, 0] += self.speed[:, 0] * self.dt
         self.positionX[:, 1] += self.speed[:, 1] * self.dt
         self.positionX = np.mod(self.positionX, self.boundaryLength)
         self.tempForK = self.K_
         self.w += self.pointThetaSpeed
-#        self.phaseTheta += self.pointThetaSpeed
         self.temp += self.pointThetaSpeed * self.dt
         self.phaseTheta += self.temp
         self.phaseTheta = np.mod(self.phaseTheta + np.pi, 2 * np.pi) - np.pi
 
     def __str__(self) -> str:
-
         if self.uniform:
             name = (
                 f"PeriodicalPotential_uniform_{self.strengthLambda:.3f}"

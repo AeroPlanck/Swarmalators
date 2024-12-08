@@ -11,7 +11,7 @@ distanceDs = np.concatenate([
     np.arange(0.1, 1, 0.2)
 ])
 rangeGamma = np.concatenate([
-    np.arange(1.0, 11.0, 0.1)
+    np.arange(1.0, 11.0, 1.0)
 ])
 kappa = [3]
 period = [0.5]

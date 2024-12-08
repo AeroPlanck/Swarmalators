@@ -422,13 +422,12 @@ class PeriodicalPotential(Swarmalators2D):
                             -self.gamma * (self.speed[:, 0] - self.speedV0 * np.cos(self.phaseTheta))
                             + self.kappa * (
                             np.sin(2 * np.pi * self.positionX[:, 0] / self.L)
-                           + 0.25 * np.sin(4 * np.pi * self.positionX[:, 1] / self.L)
                                             )
                             ) * self.dt
         self.speed[:, 1] += (
                             -self.gamma * (self.speed[:, 1] - self.speedV0 * np.sin(self.phaseTheta))
                             + self.kappa * (
-                            np.sin(2 * np.pi * self.positionX[:, 0] / self.L)
+                            np.sin(2 * np.pi * self.positionX[:, 1] / self.L)
                            + 0.25 * np.sin(4 * np.pi * self.positionX[:, 1] / self.L)
                                             )
                             ) * self.dt
